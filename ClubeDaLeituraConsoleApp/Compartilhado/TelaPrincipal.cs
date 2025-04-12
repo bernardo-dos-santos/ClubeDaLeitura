@@ -9,8 +9,9 @@ namespace ClubeDaLeituraConsoleApp.Compartilhado
 {
     public class TelaPrincipal
     {
-        public void MenuPrincipal()
+        public string MenuPrincipal()
         {
+            Console.Clear();
             Console.WriteLine("Bem vindo ao");
 
             Console.WriteLine("---------------------------------------");
@@ -20,6 +21,7 @@ namespace ClubeDaLeituraConsoleApp.Compartilhado
             Console.WriteLine("Escolha uma das opções abaixo: ");
             Console.WriteLine("1 - Menu Amigos");
             string? opcao = Console.ReadLine();
+            return opcao;
         }
 
     }

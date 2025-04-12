@@ -29,11 +29,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
         {
             ExibirCabecalho();
 
-            Console.WriteLine("Selecione amigoEditado opção desejada:");
+            Console.WriteLine("Selecione a opção desejada:");
             Console.WriteLine("1 - Cadastrar Amigo");
             Console.WriteLine("2 - Editar Amigo");
             Console.WriteLine("3 - Visualizar Amigos");
             Console.WriteLine("4 - Excluir Amigos");
+            Console.WriteLine("5 - Retornar");
             string opcao = Console.ReadLine();
 
             return opcao;
@@ -130,15 +131,16 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                 ExcluirAmigo();
             }
 
-
+            repositorioAmigo.Excluir(idExcluir, a);
+            Notificador.ExibirMensagem("O registro foi excluído com sucesso!", ConsoleColor.Green);
         }
         public Amigo ObterDadosAmigos()
         {
             Console.Write("Digite o nome do amigo: ");
             string? nome = Console.ReadLine();
-            Console.Write("Digite o nome do amigo: ");
+            Console.Write("Digite o nome do responsável do amigo: ");
             string? nomeResponsavel = Console.ReadLine();
-            Console.Write("Digite o nome do amigo: ");
+            Console.Write("Digite o telefone do amigo: ");
             string? telefone = Console.ReadLine();
             Amigo novoAmigo = new Amigo(nome, nomeResponsavel, telefone);
             return novoAmigo;

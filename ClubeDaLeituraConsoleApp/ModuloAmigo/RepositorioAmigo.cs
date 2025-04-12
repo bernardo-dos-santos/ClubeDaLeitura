@@ -33,6 +33,18 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                 }
             }
         }
+        public void Excluir(int idAmigo, Amigo amigo)
+        {
+            for (int i = 0; i < amigos.Length; i++)
+            {
+                if (amigos[i] == null) continue;
+
+                if (amigos[i].Id == idAmigo)
+                {
+                    amigos[i] = null;
+                }
+            }
+        }
         public Amigo SelecionarPorId(int idAmigos)
         {
             for (int i = 0; i < amigos.Length; i++)
