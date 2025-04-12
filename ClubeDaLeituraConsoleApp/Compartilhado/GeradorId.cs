@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.Compartilhado
 {
-    public class GeradorId
+    public static class GeradorId
     {
-        public int IdAmigo = 0;
+        public static int IdAmigo = 0;
 
-        public int GerarIdAmigo()
+        public static int GerarIdAmigo()
         {
             IdAmigo++;
             return IdAmigo;
