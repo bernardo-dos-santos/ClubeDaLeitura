@@ -21,6 +21,7 @@ namespace ClubeDaLeituraConsoleApp.Compartilhado
             Console.WriteLine("Escolha uma das opções abaixo: ");
             Console.WriteLine("1 - Menu Amigos");
             Console.WriteLine("2 - Menu Revistas");
+            Console.WriteLine("2 - Menu Caixas");
             string? opcao = Console.ReadLine();
             return opcao;
         }

@@ -13,13 +13,27 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
         public string NumeroEdicao;
         public DateTime AnoPublicado;
         public string StatusEmprestimo;
-        public string Caixa;
+        public int IdCaixa;
 
-        public Revista(string titulo, string numeroEdicao, DateTime anoPublicado)
+        public Revista(string titulo, string numeroEdicao, DateTime anoPublicado, int idcaixa)
         {
             Titulo = titulo;
             NumeroEdicao = numeroEdicao;
             AnoPublicado = anoPublicado;
+            IdCaixa = idcaixa;
+        }
+
+        public void Emprestar(Revista revista)
+        {
+            revista.StatusEmprestimo = "Emprestada";
+        }
+        public void Devolver(Revista revista)
+        {
+            revista.StatusEmprestimo = "Disponível";
+        }
+        public void Reservar(Revista revista)
+        {
+            revista.StatusEmprestimo = "Reservada";
         }
     }
 }

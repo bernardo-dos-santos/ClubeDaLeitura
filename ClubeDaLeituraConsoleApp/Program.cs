@@ -1,5 +1,6 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
 using ClubeDaLeituraConsoleApp.ModuloAmigo;
+using ClubeDaLeituraConsoleApp.ModuloCaixa;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 
 namespace ClubeDaLeituraConsoleApp
@@ -10,11 +11,12 @@ namespace ClubeDaLeituraConsoleApp
         {
             RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
             RepositorioRevista repositorioRevista = new RepositorioRevista();
-
+            RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+            
             TelaPrincipal telaPrincipal = new TelaPrincipal();
-
-            TelaRevista telaRevista = new TelaRevista(repositorioRevista);
+            TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo);
+            TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
 
             while(true)
             {
@@ -44,7 +46,7 @@ namespace ClubeDaLeituraConsoleApp
                     }
                 } else if (opcaoPrincipal == "2")
                 {
-                    string opcaoRevista = telaAmigo.MenuAmigo();
+                    string opcaoRevista = telaRevista.MenuRevistas();
                     switch (opcaoRevista)
                     {
                         case "1":
@@ -61,6 +63,34 @@ namespace ClubeDaLeituraConsoleApp
 
                         case "4":
                             telaRevista.ExcluirRevista();
+                            break;
+
+                        case "5":
+                            break;
+                        default:
+                            Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
+                            break;
+                    }
+                }
+                else if (opcaoPrincipal == "3")
+                {
+                    string opcaoCaixa = telaCaixa.MenuCaixas();
+                    switch (opcaoCaixa)
+                    {
+                        case "1":
+                            telaCaixa.CadastrarCaixa();
+                            break;
+
+                        case "2":
+                            telaCaixa.EditarCaixa();
+                            break;
+
+                        case "3":
+                            telaCaixa.VisualizarCaixas(true);
+                            break;
+
+                        case "4":
+                            telaCaixa.ExcluirCaixa();
                             break;
 
                         case "5":
