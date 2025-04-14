@@ -1,4 +1,6 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
+using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +62,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
 
             return null;
         }
+
+        
+        
 
         public Amigo[] SelecionarTodos()
         {

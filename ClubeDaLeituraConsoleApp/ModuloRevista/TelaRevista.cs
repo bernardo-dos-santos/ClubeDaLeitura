@@ -39,7 +39,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             Console.WriteLine("3 - Visualizar Revistas");
             Console.WriteLine("4 - Excluir Revista");
             Console.WriteLine("5 - Retornar");
-            string opcao = Console.ReadLine();
+            string? opcao = Console.ReadLine();
 
             return opcao;
         }
@@ -53,7 +53,13 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             Console.WriteLine();
             Revista novoRevista = ObterDadosRevistas();
             if (novoRevista == null) return;
-            
+            string erros = novoRevista.Validar(repositorioRevista);
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                return;
+            }
+                
             repositorioRevista.Adicionar(novoRevista);
             
             
@@ -70,15 +76,20 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             VisualizarRevistas(false);
             Console.WriteLine();
             Console.Write("Digite o Id da Revista que deseja editar: ");
-            int IdEditar = int.Parse(Console.ReadLine()!);
+            int IdEditar = Convertor.ConverterTextoInt();
+            if (IdEditar == 0) return;
             Revista revistaEditada = repositorioRevista.SelecionarPorId(IdEditar);
-            if (revistaEditada == null)
-            {
-                Notificador.ExibirMensagem("O Id mencionado não existe, retornando...", ConsoleColor.Red);
-                return;
-            }
+            
             int idAntigoCaixa = revistaEditada.IdCaixa;
             revistaEditada = ObterDadosRevistas();
+            if (revistaEditada == null) return;
+            revistaEditada.Validar(repositorioRevista);
+            string erros = revistaEditada.Validar(repositorioRevista);
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                return;
+            }
             repositorioRevista.Editar(IdEditar, revistaEditada, idAntigoCaixa);
             Notificador.ExibirMensagem("O registro foi editado com sucesso!", ConsoleColor.Green);
         }
@@ -164,7 +175,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
 
             VisualizarRevistas(false);
             Console.WriteLine("Digite o Id da Revista que deseja excluir");
-            int idExcluir = int.Parse(Console.ReadLine());
+            int idExcluir = Convertor.ConverterTextoInt();
+            if (idExcluir == 0) return;
 
             Revista r = repositorioRevista.SelecionarPorId(idExcluir);
             if (r == null)
@@ -185,14 +197,20 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             Console.Write("Digite o título da revista: ");
             string? titulo = Console.ReadLine();
             Console.Write("Digite o número de Edição: ");
-            string? numeroEdicao = Console.ReadLine();
+            int numeroEdicao = Convertor.ConverterTextoInt();
+            if (numeroEdicao == 0) return null;
             Console.Write("Digite o ano de publicação dessa revista: ");
-            DateTime anoPublicado = Convert.ToDateTime(Console.ReadLine());
+            if(!(DateTime.TryParse(Console.ReadLine(), out DateTime anoPublicado)))
+            {
+                Notificador.ExibirMensagem("Data Inválida, Retornando...", ConsoleColor.Red);
+                return null;
+            }
             
             if (!VisualizarCaixas())
                 return null;
-            Console.Write("Digite o Id da Caixa da revista: ");
-            int idCaixa = int.Parse(Console.ReadLine()!);
+            Console.Write("Digite o Id da caixa da revista: ");
+            int idCaixa = Convertor.ConverterTextoInt();
+            if (idCaixa == 0) return null;
             Revista novaRevista = new Revista(titulo, numeroEdicao, anoPublicado, idCaixa);
             return novaRevista;
         }       

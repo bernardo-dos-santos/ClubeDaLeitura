@@ -52,6 +52,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Console.WriteLine("---------------------------------------");
             Console.WriteLine();
             Emprestimo novoEmprestimo = ObterDadosEmprestimo();
+            if (novoEmprestimo == null) return;
+            if (novoEmprestimo.Amigo.emprestimo == true || novoEmprestimo.Amigo.ListaNegra == "Sim")
+            {
+                Notificador.ExibirMensagem("Não é possível adicionar empréstimos a esse amigo", ConsoleColor.Red);
+            }
+                novoEmprestimo.Amigo.ValidarListaNegra(novoEmprestimo, novoEmprestimo.Amigo);
             repositorioEmprestimo.Cadastrar(novoEmprestimo, novoEmprestimo.Revista);
             Notificador.ExibirMensagem("O registro foi realizado com sucesso!", ConsoleColor.Green);
         }
@@ -64,7 +70,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             VisualizarEmprestimos(false);
 
             Console.Write("Digite o Id do Empréstimo que deseja devolver: ");
-            int idDevolucao = int.Parse(Console.ReadLine()!);
+            int idDevolucao = Convertor.ConverterTextoInt();
+            if (idDevolucao == 0) return;
             Emprestimo e = repositorioEmprestimo.SelecionarPorId(idDevolucao);
             Revista r = e.Revista;
             e.Situacao = e.situacoes[1];
@@ -80,7 +87,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Console.WriteLine("---------------------------------------");
 
             Emprestimo reserva = ObterDadosEmprestimo();
-
+            if (reserva == null) return;
             reserva.Revista.Reservar(reserva.Revista);
 
         }
@@ -203,15 +210,17 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             VisualizarAmigos();
             Console.WriteLine();
             Console.Write("Digite o Id do Amigo que deseja:  ");
-            int idAmigo = int.Parse(Console.ReadLine());
+            int IdAmigo = Convertor.ConverterTextoInt();
+            if (IdAmigo == 0) return null;
 
             Console.WriteLine();
             VisualizarRevistas();
             Console.WriteLine();
             Console.Write("Digite o Id da Revista que seu amigo deseja: ");
-            int idRevista = int.Parse(Console.ReadLine());
+            int idRevista = Convertor.ConverterTextoInt();
+            if (idRevista == 0) return null;
 
-            Amigo amigo = repositorioAmigo.SelecionarPorId(idAmigo);
+            Amigo amigo = repositorioAmigo.SelecionarPorId(IdAmigo);
             Revista revista = repositorioRevista.SelecionarPorId(idRevista);
             Emprestimo novoEmprestimo = new Emprestimo(amigo, revista, DateTime.Now);
             return novoEmprestimo;

@@ -61,7 +61,6 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             repositorioAmigo.Cadastrar(novoAmigo);
             Notificador.ExibirMensagem("O Cadastro foi realizado com sucesso!", ConsoleColor.Green);
         }
-
         public void EditarAmigo()
         {
             ExibirCabecalho();
@@ -72,14 +71,10 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             VisualizarAmigos(false);
             Console.WriteLine();
             Console.Write("Digite o Id do amigo que deseja editar: ");
-            string? Id = Console.ReadLine();
-            int IdEditar = Convertor.ConverterTextoInt(Id);
-            Amigo amigoEditado = repositorioAmigo.SelecionarPorId(IdEditar);
-             if (amigoEditado == null)
-            {
-                Notificador.ExibirMensagem("O Id mencionado não existe, retornando", ConsoleColor.Red);
-                return;
-            }
+            int Id = Convertor.ConverterTextoInt();
+            if (Id == 0) return;
+            Amigo amigoEditado = repositorioAmigo.SelecionarPorId(Id);
+
             
             amigoEditado = ObterDadosAmigos();
             string erros = amigoEditado.Validar();
@@ -88,11 +83,10 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                 Notificador.ExibirMensagem(erros, ConsoleColor.Red);
                 return;
             }
-            repositorioAmigo.Editar(IdEditar, amigoEditado);
+            repositorioAmigo.Editar(Id, amigoEditado);
 
             Notificador.ExibirMensagem("O registro foi editado com sucesso!", ConsoleColor.Green);
         }
-
         public void VisualizarAmigos(bool exibirTitulo)
         {
             if (exibirTitulo)
@@ -104,8 +98,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -6} | {1, -20} | {2, -30} | {3, -20} | {4, -35}",
-                "Id", "Nome", "Nome Responsavel", "Telefone", "Empréstimo - Situação Atual"
+                "{0, -6} | {1, -15} | {2, -20} | {3, -20} | {4, -28} | {5, -15}",
+                "Id", "Nome", "Nome Responsavel", "Telefone", "Empréstimo - Situação Atual", "Lista Negra"
             );
 
             Amigo[] amigosCadastrados = repositorioAmigo.SelecionarTodos();
@@ -113,6 +107,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             for (int i = 0; i < amigosCadastrados.Length; i++)
             {
                 Amigo m = amigosCadastrados[i];
+                if (m == null) continue;
                 Emprestimo e;
                 string situacao = "Nenhuma", revista = "Nenhuma";
                 for (int j = 0; j < emprestimosCadastrados.Length; j++)
@@ -125,12 +120,10 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                         revista = e.Revista.Titulo;
                     }                    
                 }
-                if (m == null) continue;
                 
-
                 Console.WriteLine(
-                "{0, -6} | {1, -20} | {2, -30} | {3, -20} | {4, -35}",
-                m.Id, m.Nome, m.NomeResponsavel, m.Telefone, $"{revista} - {situacao}");
+                "{0, -6} | {1, -15} | {2, -20} | {3, -20} | {4, -28} | {5, -15}",
+                m.Id, m.Nome, m.NomeResponsavel, m.Telefone, $"{revista} - {situacao}", m.ListaNegra);
             }
 
             Console.WriteLine();
@@ -149,17 +142,17 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
 
             VisualizarAmigos(false);
             Console.WriteLine("Digite o Id do amigo que deseja excluir");
-            string? Id = Console.ReadLine();
-            int idExcluir = Convertor.ConverterTextoInt(Id);
+            int Id = Convertor.ConverterTextoInt();
+            if (Id == 0) return;
 
-            Amigo a = repositorioAmigo.SelecionarPorId(idExcluir);
+            Amigo a = repositorioAmigo.SelecionarPorId(Id);
             if (a == null)
             {
                 Notificador.ExibirMensagem("O Id mencionado não existe, retornando...", ConsoleColor.Red);
                 return;
             }
 
-            repositorioAmigo.Excluir(idExcluir, a);
+            repositorioAmigo.Excluir(Id, a);
             Notificador.ExibirMensagem("O registro foi excluído com sucesso!", ConsoleColor.Green);
         }
         public Amigo ObterDadosAmigos()

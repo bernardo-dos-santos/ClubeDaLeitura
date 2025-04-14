@@ -36,7 +36,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.WriteLine("3 - Visualizar Caixas");
             Console.WriteLine("4 - Excluir Caixa");
             Console.WriteLine("5 - Retornar");
-            string opcao = Console.ReadLine();
+            string? opcao = Console.ReadLine();
 
             return opcao;
         }
@@ -49,6 +49,13 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.WriteLine("---------------------------------------");
             Console.WriteLine();
             Caixa novoCaixa = ObterDadosCaixas();
+            if (novoCaixa == null) return;
+            string erros = novoCaixa.Validar(repositorioCaixa);
+            if (erros.Length > 0)
+            {
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                return;
+            }
 
             repositorioCaixa.Adicionar(novoCaixa);
             Notificador.ExibirMensagem("O Cadastro foi realizado com sucesso!", ConsoleColor.Green);
@@ -64,16 +71,18 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             VisualizarCaixas(false);
             Console.WriteLine();
             Console.Write("Digite o Id da Caixa que deseja editar: ");
-            int IdEditar = int.Parse(Console.ReadLine()!);
-            Caixa caixaEditada = repositorioCaixa.SelecionarPorId(IdEditar);
-            if (caixaEditada == null)
+            int Id = Convertor.ConverterTextoInt();
+            if (Id == 0) return;
+            Caixa caixaEditada = repositorioCaixa.SelecionarPorId(Id);
+            string erros = caixaEditada.Validar(repositorioCaixa);
+            if (erros.Length > 0)
             {
-                Notificador.ExibirMensagem("O Id mencionado não existe, digite novamente", ConsoleColor.Red);
-                EditarCaixa();
+                Notificador.ExibirMensagem(erros, ConsoleColor.Red);
+                return;
             }
 
             caixaEditada = ObterDadosCaixas();
-            repositorioCaixa.Editar(IdEditar, caixaEditada);
+            repositorioCaixa.Editar(Id, caixaEditada);
 
             Notificador.ExibirMensagem("O registro foi editado com sucesso!", ConsoleColor.Green);
         }
@@ -88,8 +97,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -6} | {1, -30} | {2, -20} | {3, -25}",
-                "Id", "Etiqueta", "Cor", "Dias De Empréstimo"
+                "{0, -6} | {1, -30} | {2, -20} | {3, -25} | {4, -15}",
+                "Id", "Etiqueta", "Cor", "Dias De Empréstimo", "Quant. Revistas"
             );
 
             Caixa[] CaixasCadastradas = repositorioCaixa.SelecionarTodos();
@@ -99,8 +108,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
 
                 if (c == null) continue;
                 Console.WriteLine(
-                "{0, -6} | {1, -30} | {2, -20} | {3, -25}",
-                c.Id, c.Etiqueta, c.Cor, c.DiasDeEmprestimo
+                "{0, -6} | {1, -30} | {2, -20} | {3, -25} | {4, -15}",
+                c.Id, c.Etiqueta, c.Cor, c.DiasDeEmprestimo, c.revistasNaCaixa.Count(item => item != null)
                 );
             }
             Console.WriteLine();
@@ -118,15 +127,11 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
 
             VisualizarCaixas(false);
             Console.WriteLine("Digite o Id da Caixa que deseja excluir");
-            int idExcluir = int.Parse(Console.ReadLine());
-
-            Caixa c = repositorioCaixa.SelecionarPorId(idExcluir);
-            if (c == null)
-            {
-                Notificador.ExibirMensagem("O Id mencionado não existe, tente novamente", ConsoleColor.Red);
-                ExcluirCaixa();
-            }
-            repositorioCaixa.Excluir(idExcluir);
+            int Id = Convertor.ConverterTextoInt();
+            if (Id == 0) return;
+            if (repositorioCaixa.caixas[Id - 1].ValidarExclusao(repositorioCaixa.caixas[Id - 1]))
+                return;
+            repositorioCaixa.Excluir(Id);
             Notificador.ExibirMensagem("O registro foi excluído com sucesso!", ConsoleColor.Green);
         }
         public Caixa ObterDadosCaixas()
@@ -136,8 +141,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.Write("Digite a cor da caixa: ");
             string? cor = Console.ReadLine();
             Console.Write("Digite qual o prazo para devoluções nessa caixa (em dias): ");
-            string? dias = Console.ReadLine();
-            int diasDeEmprestimo = Convertor.ConverterTextoInt(dias);
+            int diasDeEmprestimo = Convertor.ConverterTextoInt();
+            if (diasDeEmprestimo == 0) return null;
             Caixa novaCaixa = new Caixa(etiqueta, cor, diasDeEmprestimo);
             return novaCaixa;
         }

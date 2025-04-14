@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -15,6 +16,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
         public string NomeResponsavel;
         public string Telefone;
         public bool emprestimo = false;
+        public string ListaNegra = "Não";
 
         public Amigo(string nome, string nomeResponsavel, string telefone)
         {
@@ -46,6 +48,17 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                 erros += "O campo 'Telefone' deve seguir o formato 00 0000-0000 ou 00 00000-0000.";
 
             return erros;
+        }
+        public string ValidarListaNegra(Emprestimo e, Amigo m)
+        {
+            bool listaNegra = false;
+            if (e.Amigo == m)
+            {
+                if (e.Situacao == "Atrasado") listaNegra = true;
+            }
+            if (listaNegra == true) ListaNegra = "Sim";
+            else ListaNegra = "Não";
+                return ListaNegra;
         }
 
 
