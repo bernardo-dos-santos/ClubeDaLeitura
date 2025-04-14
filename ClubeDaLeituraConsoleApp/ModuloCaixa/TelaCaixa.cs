@@ -111,13 +111,13 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
         {
             ExibirCabecalho();
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Excluindo Revista...");
+            Console.WriteLine("Excluindo Caixa...");
             Console.WriteLine("---------------------------------------");
 
             Console.WriteLine();
 
             VisualizarCaixas(false);
-            Console.WriteLine("Digite o Id da Revista que deseja excluir");
+            Console.WriteLine("Digite o Id da Caixa que deseja excluir");
             int idExcluir = int.Parse(Console.ReadLine());
 
             Caixa c = repositorioCaixa.SelecionarPorId(idExcluir);

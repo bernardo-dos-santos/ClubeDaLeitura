@@ -1,6 +1,7 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
 using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloCaixa;
+using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 
 namespace ClubeDaLeituraConsoleApp
@@ -9,13 +10,15 @@ namespace ClubeDaLeituraConsoleApp
     {
         static void Main(string[] args)
         {
-            RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
-            RepositorioRevista repositorioRevista = new RepositorioRevista();
             RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+            RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+            RepositorioRevista repositorioRevista = new RepositorioRevista(repositorioCaixa);
+            RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
+            
             
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
-            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo);
+            TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
 
             while(true)

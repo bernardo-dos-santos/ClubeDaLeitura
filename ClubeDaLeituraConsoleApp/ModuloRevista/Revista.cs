@@ -12,8 +12,10 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
         public string Titulo;
         public string NumeroEdicao;
         public DateTime AnoPublicado;
-        public string StatusEmprestimo;
+        public string[] StatusEmprestimo = new string[] { "Emprestada", "Disponível", "Reservada" };
+        public string StatusAtual;
         public int IdCaixa;
+        public string caixa;
 
         public Revista(string titulo, string numeroEdicao, DateTime anoPublicado, int idcaixa)
         {
@@ -25,15 +27,15 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
 
         public void Emprestar(Revista revista)
         {
-            revista.StatusEmprestimo = "Emprestada";
+            revista.StatusAtual = StatusEmprestimo[0];
         }
         public void Devolver(Revista revista)
         {
-            revista.StatusEmprestimo = "Disponível";
+            revista.StatusAtual = StatusEmprestimo[1];
         }
         public void Reservar(Revista revista)
         {
-            revista.StatusEmprestimo = "Reservada";
+            revista.StatusAtual = StatusEmprestimo[2];
         }
     }
 }

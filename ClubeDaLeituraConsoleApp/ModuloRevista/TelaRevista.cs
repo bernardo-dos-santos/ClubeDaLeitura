@@ -52,9 +52,11 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             Console.WriteLine("---------------------------------------");
             Console.WriteLine();
             Revista novoRevista = ObterDadosRevistas();
-
+            if (novoRevista == null) return;
+            
             repositorioRevista.Adicionar(novoRevista);
-            repositorioCaixa.caixas[novoRevista.IdCaixa].AdicionarRevista(novoRevista); 
+            
+            
             Notificador.ExibirMensagem("O Cadastro foi realizado com sucesso!", ConsoleColor.Green);
         }
 
@@ -75,19 +77,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
                 Notificador.ExibirMensagem("O Id mencionado não existe, retornando...", ConsoleColor.Red);
                 return;
             }
-            int idAntigo = revistaEditada.IdCaixa;
-
-                revistaEditada = ObterDadosRevistas();
-            // uso esse if pq se o Id for o mesmo, iria adicionar a mesma revista na mesma caixa 2 vezes
-            // Não necessariamente o usuário vai mudar o IdCaixa
-            if(!(idAntigo == revistaEditada.IdCaixa))
-            {
-                //Adicionando em outra Caixa
-                repositorioCaixa.caixas[revistaEditada.IdCaixa].AdicionarRevista(revistaEditada);
-                //Removendo da Classe Antiga
-                repositorioCaixa.caixas[idAntigo].RemoverRevista(revistaEditada);
-            }
-            repositorioRevista.Editar(IdEditar, revistaEditada);
+            int idAntigoCaixa = revistaEditada.IdCaixa;
+            revistaEditada = ObterDadosRevistas();
+            repositorioRevista.Editar(IdEditar, revistaEditada, idAntigoCaixa);
             Notificador.ExibirMensagem("O registro foi editado com sucesso!", ConsoleColor.Green);
         }
 
@@ -102,8 +94,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -6} | {1, -20} | {2, -15} | {3, -20} | {4, -15}",
-                "Id", "Titulo", "Número de Edição", "Ano de Publicação", "Status Atual"
+                "{0, -6} | {1, -20} | {2, -15} | {3, -20} | {4, -15} | {5, -20}",
+                "Id", "Titulo", "Número de Edição", "Ano de Publicação", "Status Atual", "Caixa"
             );
 
             Revista[] RevistasCadastradas = repositorioRevista.SelecionarTodos();
@@ -115,10 +107,10 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
                 if (r == null) continue;
 
                 Console.WriteLine(
-            "{0, -6} | {1, -20} | {2, -15} | {3, -22} | {4, -17}",
-                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicado.ToShortDateString(), r.StatusEmprestimo
-            );
-        }
+                "{0, -6} | {1, -20} | {2, -16} | {3, -20} | {4, -15} | {5, -20}",
+                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicado.ToShortDateString(), r.StatusEmprestimo, r.caixa
+                );
+            }
 
             Console.WriteLine();
 
@@ -178,9 +170,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             Revista r = repositorioRevista.SelecionarPorId(idExcluir);
             if (r == null)
             {
-                Notificador.ExibirMensagem("O Id mencionado não existe, tente novamente", ConsoleColor.Red);
-                ExcluirRevista();
-            } else if (r.StatusEmprestimo != "Disponível")
+                Notificador.ExibirMensagem("O Id mencionado não existe, retornando", ConsoleColor.Red);
+                return;
+            } else if (r.StatusAtual != "Disponível")
             {
                 Notificador.ExibirMensagem("Não é possível excluir revistas que estão emprestadas/reservadas", ConsoleColor.Red);
                 return;
@@ -197,9 +189,10 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             string? numeroEdicao = Console.ReadLine();
             Console.Write("Digite o ano de publicação dessa revista: ");
             DateTime anoPublicado = Convert.ToDateTime(Console.ReadLine());
-            Console.Write("Digite o Id da Caixa da revista: ");
+            
             if (!VisualizarCaixas())
                 return null;
+            Console.Write("Digite o Id da Caixa da revista: ");
             int idCaixa = int.Parse(Console.ReadLine()!);
             Revista novaRevista = new Revista(titulo, numeroEdicao, anoPublicado, idCaixa);
             return novaRevista;

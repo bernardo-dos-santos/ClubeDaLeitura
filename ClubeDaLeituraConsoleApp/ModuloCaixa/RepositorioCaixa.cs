@@ -17,6 +17,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
         {
             caixas[contadorCaixas] = caixa;
             caixas[contadorCaixas].Id = GeradorId.GerarIdCaixa();
+            contadorCaixas++;
         }
 
         public void Editar(int idCaixa, Caixa caixa)

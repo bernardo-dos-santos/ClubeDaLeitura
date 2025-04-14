@@ -12,6 +12,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
         public string Nome;
         public string NomeResponsavel;
         public string Telefone;
+        public bool emprestimo = false;
 
         public Amigo(string nome, string nomeResponsavel, string telefone)
         {

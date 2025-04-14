@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
     public class TelaAmigo
     {
         public RepositorioAmigo repositorioAmigo;
+        public RepositorioEmprestimo repositorioEmprestimo;
 
-        public TelaAmigo(RepositorioAmigo repositorioAmigo)
+        public TelaAmigo(RepositorioAmigo repositorioAmigo, RepositorioEmprestimo repositorioEmprestimo)
         {
             this.repositorioAmigo = repositorioAmigo;
+            this.repositorioEmprestimo = repositorioEmprestimo;
         }
 
         public void ExibirCabecalho()
@@ -88,8 +91,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             Console.WriteLine();
 
             Console.WriteLine(
-                "{0, -6} | {1, -20} | {2, -30} | {3, -20}",
-                "Id", "Nome", "Nome Responsavel", "Telefone"
+                "{0, -6} | {1, -20} | {2, -30} | {3, -20} | {4, -35}",
+                "Id", "Nome", "Nome Responsavel", "Telefone", "Empréstimo - Situação Atual"
             );
 
             Amigo[] amigosCadastrados = repositorioAmigo.SelecionarTodos();
@@ -101,8 +104,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                 if (m == null) continue;
 
                 Console.WriteLine(
-                "{0, -6} | {1, -20} | {2, -30} | {3, -20}",
-                m.Id, m.Nome, m.NomeResponsavel, m.Telefone
+                "{0, -6} | {1, -20} | {2, -30} | {3, -20} | {4, -35}",
+                m.Id, m.Nome, m.NomeResponsavel, m.Telefone, 
+                $"{repositorioEmprestimo.emprestimos[i].Revista.Titulo} - {repositorioEmprestimo.emprestimos[i].Situacao}"
                 );
             }
 
