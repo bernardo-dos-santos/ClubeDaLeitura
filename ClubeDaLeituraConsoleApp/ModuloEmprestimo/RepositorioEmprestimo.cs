@@ -42,5 +42,27 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
         {
             return emprestimos;
         }
+
+        public void RegistrarMultas()
+        {
+            string situacao = "Atrasado";
+            for (int i = 0; i < emprestimos.Length; i++)
+            {
+                Emprestimo e = emprestimos[i];
+                if (e == null) continue;
+                if(e.Situacao == situacao)
+                {
+                    e.TemMulta = true;
+                    int multa = (e.DataDevolucao - DateTime.Now).Days;
+                    e.ValorMulta = multa * 2;
+                }
+            }
+        }
+        public void RegistrarPagamento(Emprestimo e)
+        {
+            e.TemMulta = false;
+            e.ValorMulta = 0;
+            e.Situacao = "Concluído";
+        }
     }
 }

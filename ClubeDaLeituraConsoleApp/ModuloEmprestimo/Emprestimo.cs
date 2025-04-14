@@ -17,7 +17,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
         public DateTime DataEmprestimo;
         public DateTime DataDevolucao;
         public string Situacao;
-        public string[] situacoes = new string[] { "Aberto", "Concluído", "Atrasado" , "Reservado"};
+        public string[] situacoes = new string[] {"Aberto", "Concluído", "Atrasado"};
+        public decimal ValorMulta;
+        public bool TemMulta;
 
         public Emprestimo(Amigo amigo, Revista revista, DateTime dataEmprestimo)
         {

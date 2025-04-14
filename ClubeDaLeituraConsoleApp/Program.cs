@@ -124,6 +124,12 @@ namespace ClubeDaLeituraConsoleApp
                             telaEmprestimo.RegistrarReserva();
                             break;
                         case "5":
+                            telaEmprestimo.VisualizarMultas(true);
+                            break;
+                        case "6":
+                            telaEmprestimo.RegistrarPagamento();
+                            break;
+                        case "7":
                             break;
                         default:
                             Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);

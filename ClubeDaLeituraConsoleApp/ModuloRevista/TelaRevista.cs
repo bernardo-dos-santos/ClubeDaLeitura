@@ -189,7 +189,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
                 return;
             }
 
-                repositorioRevista.Excluir(idExcluir);
+                repositorioRevista.Excluir(idExcluir, repositorioCaixa);
             Notificador.ExibirMensagem("O registro foi excluído com sucesso!", ConsoleColor.Green);
         }
         public Revista ObterDadosRevistas()

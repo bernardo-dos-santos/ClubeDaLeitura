@@ -39,7 +39,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Console.WriteLine("2 - Regitrar Devolução");
             Console.WriteLine("3 - Visualizar Empréstimos");
             Console.WriteLine("4 - Registrar Reserva");
-            Console.WriteLine("5 - Retornar");
+            Console.WriteLine("5 - Visualizar Multas");
+            Console.WriteLine("6 - Registrar Pagamento");
+            Console.WriteLine("7 - Retornar");
             string? opcao = Console.ReadLine();
 
             return opcao;
@@ -56,6 +58,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             if (novoEmprestimo.Amigo.emprestimo == true || novoEmprestimo.Amigo.ListaNegra == "Sim")
             {
                 Notificador.ExibirMensagem("Não é possível adicionar empréstimos a esse amigo", ConsoleColor.Red);
+                return;
             }
                 novoEmprestimo.Amigo.ValidarListaNegra(novoEmprestimo, novoEmprestimo.Amigo);
             repositorioEmprestimo.Cadastrar(novoEmprestimo, novoEmprestimo.Revista);
@@ -72,24 +75,17 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Console.Write("Digite o Id do Empréstimo que deseja devolver: ");
             int idDevolucao = Convertor.ConverterTextoInt();
             if (idDevolucao == 0) return;
+            if(repositorioEmprestimo.SelecionarPorId(idDevolucao).TemMulta == true)
+            {
+                Notificador.ExibirMensagem("Não é possível fechar um empréstimo com multas", ConsoleColor.Red);
+                return;
+            }
             Emprestimo e = repositorioEmprestimo.SelecionarPorId(idDevolucao);
             Revista r = e.Revista;
             e.Situacao = e.situacoes[1];
             e.Amigo.emprestimo = false;
             e.Revista.Devolver(r);
             Notificador.ExibirMensagem("O registro foi realizado com sucesso!", ConsoleColor.Green);
-        }
-        public void RegistrarReserva()
-        {
-            ExibirCabecalho();
-            Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Registrando Reserva");
-            Console.WriteLine("---------------------------------------");
-
-            Emprestimo reserva = ObterDadosEmprestimo();
-            if (reserva == null) return;
-            reserva.Revista.Reservar(reserva.Revista);
-
         }
         public void VisualizarAmigos()
         {
@@ -204,6 +200,51 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
             }
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
+        }
+        public void VisualizarMultas(bool titulo)
+        {
+            repositorioEmprestimo.RegistrarMultas();
+
+            if (titulo)
+                ExibirCabecalho();
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Visualizando Multas...");
+            Console.WriteLine("---------------------------------------");
+
+            Console.WriteLine();
+
+            Console.WriteLine(
+                "{0, -15} | {1, -30} | {2, -20} | {3, -25}",
+                "Id Empréstimo", "Amigo", "Revista", "Valor Multa"
+            );
+
+            Emprestimo[] emprestimos = repositorioEmprestimo.SelecionarTodos();
+            for (int i = 0; i < emprestimos.Length; i++)
+            {
+                Emprestimo e = emprestimos[i];
+
+                if (e == null) continue;
+                if (e.TemMulta == true)
+                {
+                    Console.WriteLine(
+                    "{0, -10} | {1, -30} | {2, -20} | {3, -25}",
+                    e.Id, e.Amigo.Nome, e.Revista.Titulo, $"R${e.ValorMulta}"
+                    );
+                }
+            }
+            Console.WriteLine();
+
+            Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
+        }
+        public void RegistrarPagamento()
+        {
+            VisualizarMultas(false);
+            Console.Write("Digite o Id do empréstimo que deseja quitar: ");
+            int idMulta = Convertor.ConverterTextoInt();
+            if (idMulta == 0) return;
+            repositorioEmprestimo.RegistrarPagamento(repositorioEmprestimo.SelecionarPorId(idMulta));
+
+            Notificador.ExibirMensagem("Obs: Se deseja Registrar esse empréstimo como Concluído, vá à aba Registrar Devolução", ConsoleColor.DarkRed);
         }
         public Emprestimo ObterDadosEmprestimo()
         {

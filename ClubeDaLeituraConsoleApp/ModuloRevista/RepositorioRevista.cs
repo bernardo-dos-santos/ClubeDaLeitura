@@ -54,15 +54,18 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             }
         }
 
-        public void Excluir(int idRevista)
+        public void Excluir(int idRevista, RepositorioCaixa repositorioCaixa)
         {
+            
             for (int i = 0; i < revistas.Length; i++)
             {
                 if (revistas[i] == null) continue;
+                if (repositorioCaixa.caixas[i].revistasNaCaixa[i].Id == idRevista)
+                    repositorioCaixa.caixas[i].revistasNaCaixa[i] = null;
 
                 if (revistas[i].Id == idRevista)
                 {
-                    revistas[i] = null;
+                revistas[i] = null;
                 }
             }
         }
