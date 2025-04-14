@@ -38,7 +38,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Console.WriteLine("1 - Registrar Empréstimo");
             Console.WriteLine("2 - Regitrar Devolução");
             Console.WriteLine("3 - Visualizar Empréstimos");
-            Console.WriteLine("4 - Retornar");
+            Console.WriteLine("4 - Registrar Reserva");
+            Console.WriteLine("5 - Retornar");
             string? opcao = Console.ReadLine();
 
             return opcao;
@@ -52,7 +53,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Console.WriteLine();
             Emprestimo novoEmprestimo = ObterDadosEmprestimo();
             repositorioEmprestimo.Cadastrar(novoEmprestimo, novoEmprestimo.Revista);
-       
+            Notificador.ExibirMensagem("O registro foi realizado com sucesso!", ConsoleColor.Green);
         }
         public void RegistrarDevolucao()
         {
@@ -69,6 +70,18 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             e.Situacao = e.situacoes[1];
             e.Amigo.emprestimo = false;
             e.Revista.Devolver(r);
+            Notificador.ExibirMensagem("O registro foi realizado com sucesso!", ConsoleColor.Green);
+        }
+        public void RegistrarReserva()
+        {
+            ExibirCabecalho();
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Registrando Reserva");
+            Console.WriteLine("---------------------------------------");
+
+            Emprestimo reserva = ObterDadosEmprestimo();
+
+            reserva.Revista.Reservar(reserva.Revista);
 
         }
         public void VisualizarAmigos()
@@ -125,7 +138,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
                 Console.WriteLine(
                 "{0, -6} | {1, -20} | {2, -16} | {3, -20} | {4, -15} | {5, -20}",
-                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicado.ToShortDateString(), r.StatusEmprestimo, r.caixa
+                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicado.ToShortDateString(), r.StatusAtual, r.caixa
                 );
             }
 
@@ -133,7 +146,6 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
-
         public void VisualizarEmprestimos(bool titulo)
         {
             if (titulo) ExibirCabecalho();
@@ -150,34 +162,47 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
                 if (e == null) continue;
                 
-                if (e.Situacao == "Concluída" && titulo)
+                if (e.Situacao == "Concluído")
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(
                         "{0, -6} | {1, -20} | {2, -20} | {3, -15} | {4, -15}",
                         e.Id, e.Amigo.Nome, e.Revista.Titulo, e.Situacao, "Entregue", ConsoleColor.Green
                     );
-                } else if (e.Situacao == "Aberta")
+                    Console.ResetColor();
+                } else if (e.Situacao == "Aberto")
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(
                         "{0, -6} | {1, -20} | {2, -20} | {3, -15} | {4, -15}",
-                        e.Id, e.Amigo.Nome, e.Revista.Titulo, e.Situacao, e.ObterDataDevolucao(e.Revista.IdCaixa, repositorioRevista.repositorioCaixa), ConsoleColor.DarkYellow
+                        e.Id, e.Amigo.Nome, e.Revista.Titulo, e.Situacao, e.ObterDataDevolucao(e.Revista.IdCaixa, repositorioRevista.repositorioCaixa).ToString("dd/MM/yyyy")
                     );
+                    Console.ResetColor();
+                } else if (e.Situacao == "Atrasado")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(
+                        "{0, -6} | {1, -20} | {2, -20} | {3, -15} | {4, -15}",
+                        e.Id, e.Amigo.Nome, e.Revista.Titulo, e.Situacao, "Atrasado"
+                    );
+                    Console.ResetColor();
                 } else
                 {
-                    Console.WriteLine(
-                        "{0, -6} | {1, -20} | {2, -20} | {3, -15} | {4, -15}",
-                        e.Id, e.Amigo.Nome, e.Revista.Titulo, e.Situacao, $"Atrasado", ConsoleColor.Red
-                    );
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine
+                        ("{0, -6} | {1, -20} | {2, -20} | {3, -15} | {4, -15}",
+                        e.Id, e.Amigo.Nome, e.Revista.Titulo, e.Situacao, "Reservado");
+                    Console.ResetColor();
                 }
 
             }
-
+            Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
         public Emprestimo ObterDadosEmprestimo()
         {
             VisualizarAmigos();
             Console.WriteLine();
-            Console.Write("Digite o Id do Amigo que deseja fazer um empréstimo");
+            Console.Write("Digite o Id do Amigo que deseja:  ");
             int idAmigo = int.Parse(Console.ReadLine());
 
             Console.WriteLine();
@@ -191,5 +216,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             Emprestimo novoEmprestimo = new Emprestimo(amigo, revista, DateTime.Now);
             return novoEmprestimo;
         }
+        public bool VerificarRevista(Emprestimo e)
+        {
+            if (e.Revista.StatusAtual != "Disponível") return false;
+
+            return true;
+        }
+        
     }
 }

@@ -108,7 +108,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
 
                 Console.WriteLine(
                 "{0, -6} | {1, -20} | {2, -16} | {3, -20} | {4, -15} | {5, -20}",
-                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicado.ToShortDateString(), r.StatusEmprestimo, r.caixa
+                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicado.ToShortDateString(), r.StatusAtual, r.caixa
                 );
             }
 
@@ -116,7 +116,6 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
 
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
         }
-
         public bool VisualizarCaixas()
         {
             Console.WriteLine("---------------------------------------");

@@ -17,7 +17,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
         public DateTime DataEmprestimo;
         public DateTime DataDevolucao;
         public string Situacao;
-        public string[] situacoes = new string[] { "Aberto", "Concluído", "Atrasado" };
+        public string[] situacoes = new string[] { "Aberto", "Concluído", "Atrasado" , "Reservado"};
 
         public Emprestimo(Amigo amigo, Revista revista, DateTime dataEmprestimo)
         {
@@ -26,7 +26,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             DataEmprestimo = dataEmprestimo;
         }
 
-        public void RegistrarDevolução(Amigo a, Revista r)
+        public void RegistrarDevolução( Revista r)
         {
             r.Devolver(r);
 
@@ -34,7 +34,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
         public DateTime ObterDataDevolucao(int idCaixa, RepositorioCaixa c)
         {
-            int dias = c.caixas[idCaixa].DiasDeEmprestimo;
+            int dias = c.caixas[idCaixa - 1].DiasDeEmprestimo;
             DataDevolucao = DataEmprestimo.AddDays(dias);
             return DataDevolucao;
         }

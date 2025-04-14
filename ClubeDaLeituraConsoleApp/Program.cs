@@ -20,6 +20,7 @@ namespace ClubeDaLeituraConsoleApp
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
+            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioAmigo, repositorioRevista);
 
             while(true)
             {
@@ -102,6 +103,38 @@ namespace ClubeDaLeituraConsoleApp
                             Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
                             break;
                     }
+                } else if (opcaoPrincipal == "4")
+                {
+                    string opcaoCaixa = telaEmprestimo.MenuEmprestimos();
+                    switch (opcaoCaixa)
+                    {
+                        case "1":
+                            telaEmprestimo.RegistrarEmprestimo();
+                            break;
+
+                        case "2":
+                            telaEmprestimo.RegistrarDevolucao();
+                            break;
+
+                        case "3":
+                            telaEmprestimo.VisualizarEmprestimos(true);
+                            break;
+
+                        case "4":
+                            telaEmprestimo.RegistrarReserva();
+                            break;
+                        case "5":
+                            break;
+                        default:
+                            Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
+                            break;
+                    }
+                } else if (opcaoPrincipal == "5")
+                {
+                    break;
+                } else
+                {
+                    Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
                 }
 
             }

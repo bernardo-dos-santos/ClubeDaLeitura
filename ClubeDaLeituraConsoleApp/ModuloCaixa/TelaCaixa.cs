@@ -136,7 +136,8 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.Write("Digite a cor da caixa: ");
             string? cor = Console.ReadLine();
             Console.Write("Digite qual o prazo para devoluções nessa caixa (em dias): ");
-            int diasDeEmprestimo = int.Parse(Console.ReadLine());
+            string? dias = Console.ReadLine();
+            int diasDeEmprestimo = Convertor.ConverterTextoInt(dias);
             Caixa novaCaixa = new Caixa(etiqueta, cor, diasDeEmprestimo);
             return novaCaixa;
         }
