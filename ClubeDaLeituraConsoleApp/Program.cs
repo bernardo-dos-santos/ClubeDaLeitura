@@ -121,7 +121,7 @@ namespace ClubeDaLeituraConsoleApp
                             break;
 
                         case "4":
-                            telaEmprestimo.RegistrarReserva();
+                            
                             break;
                         case "5":
                             telaEmprestimo.VisualizarMultas(true);

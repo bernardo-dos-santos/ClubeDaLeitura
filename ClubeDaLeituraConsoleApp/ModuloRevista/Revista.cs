@@ -54,13 +54,11 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             for (int i = 0; i < revistas.Length; i++)
             {
                 if (revistas[i] == null) continue;
-                for (int j = 0; j < revistas.Length; j++)
+                for (int j = 1; j < revistas.Length - 1; j++)
                 {
-                    j++;
                     if (revistas[j] == null) continue;
                     if (revistas[i].Titulo == revistas[j].Titulo && revistas[i].NumeroEdicao == revistas[j].NumeroEdicao)
                         erros += "Os Campos 'Título' e 'Número de Edição não podem repetir juntos'.\n";
-                    j--;
                 }
             }
             return erros;

@@ -25,6 +25,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             revistas[contadorRevistas] = revista;
             revistas[contadorRevistas].StatusAtual = revistas[contadorRevistas].StatusEmprestimo[1];
             revistas[contadorRevistas].Id = GeradorId.GerarIdRevista();
+            contadorRevistas++;
             
         }
 
