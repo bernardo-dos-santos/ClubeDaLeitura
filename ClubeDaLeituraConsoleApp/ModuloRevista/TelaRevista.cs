@@ -79,7 +79,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             int IdEditar = Convertor.ConverterTextoInt();
             if (IdEditar == 0) return;
             Revista revistaEditada = repositorioRevista.SelecionarPorId(IdEditar);
-            
+            if (revistaEditada == null)
+            {
+                Notificador.ExibirMensagem("Id Inválido, Retornando...", ConsoleColor.Red);
+                return;
+            }
+
             int idAntigoCaixa = revistaEditada.IdCaixa;
             revistaEditada = ObterDadosRevistas();
             if (revistaEditada == null) return;

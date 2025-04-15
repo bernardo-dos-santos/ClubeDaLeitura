@@ -35,7 +35,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
                 }
             }
         }
-        public void Excluir(int idAmigo, Amigo amigo)
+        public void Excluir(int idAmigo)
         {
             for (int i = 0; i < amigos.Length; i++)
             {

@@ -28,17 +28,17 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             IdCaixa = idcaixa;
         }
 
-        public void Emprestar(Revista revista)
+        public void Emprestar()
         {
-            revista.StatusAtual = StatusEmprestimo[0];
+            StatusAtual = StatusEmprestimo[0];
         }
-        public void Devolver(Revista revista)
+        public void Devolver()
         {
-            revista.StatusAtual = StatusEmprestimo[1];
+            StatusAtual = StatusEmprestimo[1];
         }
-        public void Reservar(Revista revista)
+        public void Reservar()
         {
-            revista.StatusAtual = StatusEmprestimo[2];
+            StatusAtual = StatusEmprestimo[2];
         }
         public string Validar(RepositorioRevista repositorioRevista)
         {

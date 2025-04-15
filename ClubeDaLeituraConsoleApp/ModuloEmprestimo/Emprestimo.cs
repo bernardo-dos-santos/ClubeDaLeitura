@@ -30,7 +30,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
         public void RegistrarDevolução( Revista r)
         {
-            r.Devolver(r);
+            r.Devolver();
 
         }
 

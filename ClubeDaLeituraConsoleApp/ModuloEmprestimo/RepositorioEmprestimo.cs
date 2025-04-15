@@ -13,12 +13,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
         public Emprestimo[] emprestimos = new Emprestimo[100];
         public int contadorEmprestimo = 0;
 
-        public void Cadastrar(Emprestimo e, Revista r)
+        public void Cadastrar(Emprestimo e)
         {
             e.Id = GeradorId.GerarIdEmprestimo();
             e.Situacao = e.situacoes[0];
             e.Amigo.emprestimo = true;
-            r.Emprestar(r);
+            e.Revista.Emprestar();
             emprestimos[contadorEmprestimo] = e;
             contadorEmprestimo++;
         }

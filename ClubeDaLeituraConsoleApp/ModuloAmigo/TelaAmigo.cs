@@ -4,6 +4,7 @@ using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,8 +75,12 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             int Id = Convertor.ConverterTextoInt();
             if (Id == 0) return;
             Amigo amigoEditado = repositorioAmigo.SelecionarPorId(Id);
+            if (amigoEditado == null)
+            {
+                Notificador.ExibirMensagem("Id Inválido, Retornando...", ConsoleColor.Red);
+                return;
+            }
 
-            
             amigoEditado = ObterDadosAmigos();
             string erros = amigoEditado.Validar();
             if (erros.Length > 0)
@@ -144,15 +149,18 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             Console.WriteLine("Digite o Id do amigo que deseja excluir");
             int Id = Convertor.ConverterTextoInt();
             if (Id == 0) return;
-
             Amigo a = repositorioAmigo.SelecionarPorId(Id);
             if (a == null)
             {
                 Notificador.ExibirMensagem("O Id mencionado não existe, retornando...", ConsoleColor.Red);
                 return;
             }
-
-            repositorioAmigo.Excluir(Id, a);
+            if(!(ValidarExclusao(a)))
+            {
+                Notificador.ExibirMensagem("Não é permitido excluir amigos que tenham empréstimos", ConsoleColor.Red);
+                return;
+            }
+            repositorioAmigo.Excluir(Id);
             Notificador.ExibirMensagem("O registro foi excluído com sucesso!", ConsoleColor.Green);
         }
         public Amigo ObterDadosAmigos()
@@ -165,6 +173,20 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             string? telefone = Console.ReadLine();
             Amigo novoAmigo = new Amigo(nome, nomeResponsavel, telefone);
             return novoAmigo;
+        }
+
+        public bool ValidarExclusao(Amigo a)
+        {           
+            for (int i = 0; i < repositorioEmprestimo.emprestimos.Length; i++)
+            {
+                Emprestimo e = repositorioEmprestimo.emprestimos[i];
+                if (e == null) continue;
+                if(a == e.Amigo)
+                {
+                    if (e.Revista.StatusAtual != "Disponível") return false;
+                }
+            }
+            return true;
         }
     }
 }

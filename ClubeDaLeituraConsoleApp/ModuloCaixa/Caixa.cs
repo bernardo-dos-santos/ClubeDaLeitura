@@ -72,9 +72,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
                 erros += "O campo 'Dias de Empréstimo' precisa ser maior que 0.\n";
             return erros;
         }
-        public bool ValidarExclusao(Caixa c)
+        public bool ValidarExclusao()
         {
-            if (c.revistasNaCaixa == null) return false;
+            if (revistasNaCaixa == null) return false;
             else
             {
                 Notificador.ExibirMensagem("Não é possível excluir caixas que tem revistas", ConsoleColor.Red);

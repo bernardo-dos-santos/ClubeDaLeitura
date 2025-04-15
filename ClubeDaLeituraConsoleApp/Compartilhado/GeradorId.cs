@@ -12,6 +12,7 @@ namespace ClubeDaLeituraConsoleApp.Compartilhado
         public static int IdRevista = 0;
         public static int IdCaixa = 0;
         public static int IdEmprestimo = 0;
+        public static int IdReserva = 0;
         public static int GerarIdAmigo()
         {
             IdAmigo++;
@@ -34,6 +35,12 @@ namespace ClubeDaLeituraConsoleApp.Compartilhado
         {
             IdEmprestimo++;
             return IdEmprestimo;
+        }
+
+        public static int GerarIdReserva()
+        {
+            IdReserva++;
+            return IdReserva;
         }
 
     }

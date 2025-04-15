@@ -74,6 +74,11 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             int Id = Convertor.ConverterTextoInt();
             if (Id == 0) return;
             Caixa caixaEditada = repositorioCaixa.SelecionarPorId(Id);
+            if (caixaEditada == null)
+            {
+                Notificador.ExibirMensagem("Id Inválido, Retornando...", ConsoleColor.Red);
+                return;
+            }
             string erros = caixaEditada.Validar(repositorioCaixa);
             if (erros.Length > 0)
             {
@@ -129,7 +134,13 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.WriteLine("Digite o Id da Caixa que deseja excluir");
             int Id = Convertor.ConverterTextoInt();
             if (Id == 0) return;
-            if (repositorioCaixa.caixas[Id - 1].ValidarExclusao(repositorioCaixa.caixas[Id - 1]))
+            Caixa c = repositorioCaixa.SelecionarPorId(Id);
+            if (c == null)
+            {
+                Notificador.ExibirMensagem("Id Inválido, Retornando...", ConsoleColor.Red);
+                return;
+            }
+            if (c.ValidarExclusao())
                 return;
             repositorioCaixa.Excluir(Id);
             Notificador.ExibirMensagem("O registro foi excluído com sucesso!", ConsoleColor.Green);

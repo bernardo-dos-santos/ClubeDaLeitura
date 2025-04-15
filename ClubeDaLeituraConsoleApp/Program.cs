@@ -2,6 +2,7 @@
 using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloCaixa;
 using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
+using ClubeDaLeituraConsoleApp.ModuloReservas;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 
 namespace ClubeDaLeituraConsoleApp
@@ -14,41 +15,48 @@ namespace ClubeDaLeituraConsoleApp
             RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
             RepositorioRevista repositorioRevista = new RepositorioRevista(repositorioCaixa);
             RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
-            
+            RepositorioReserva repositorioReserva = new RepositorioReserva(repositorioEmprestimo);
             
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioAmigo, repositorioRevista);
+            TelaReserva telaReserva = new TelaReserva(repositorioReserva, repositorioAmigo, repositorioRevista, repositorioEmprestimo);
 
             while(true)
             {
                 string opcaoPrincipal = telaPrincipal.MenuPrincipal();
 
-                if(opcaoPrincipal == "1")
+                if (opcaoPrincipal == "1")
                 {
                     string opcaoAmigo = telaAmigo.MenuAmigo();
                     switch (opcaoAmigo)
                     {
-                        case "1": telaAmigo.CadastrarAmigo();
+                        case "1":
+                            telaAmigo.CadastrarAmigo();
                             break;
-                        
-                        case "2": telaAmigo.EditarAmigo();
+
+                        case "2":
+                            telaAmigo.EditarAmigo();
                             break;
-                        
-                        case "3": telaAmigo.VisualizarAmigos(true);
+
+                        case "3":
+                            telaAmigo.VisualizarAmigos(true);
                             break;
-                        
-                        case "4": telaAmigo.ExcluirAmigo();
+
+                        case "4":
+                            telaAmigo.ExcluirAmigo();
                             break;
 
                         case "5":
                             break;
-                        default: Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
+                        default:
+                            Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
                             break;
                     }
-                } else if (opcaoPrincipal == "2")
+                }
+                else if (opcaoPrincipal == "2")
                 {
                     string opcaoRevista = telaRevista.MenuRevistas();
                     switch (opcaoRevista)
@@ -103,42 +111,64 @@ namespace ClubeDaLeituraConsoleApp
                             Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
                             break;
                     }
-                } else if (opcaoPrincipal == "4")
+                }
+                else if (opcaoPrincipal == "4")
                 {
-                    string opcaoCaixa = telaEmprestimo.MenuEmprestimos();
-                    switch (opcaoCaixa)
+                    string opcaoEmprestimo = telaEmprestimo.MenuEmprestimos();
+                    switch (opcaoEmprestimo)
                     {
                         case "1":
                             telaEmprestimo.RegistrarEmprestimo();
                             break;
-
                         case "2":
                             telaEmprestimo.RegistrarDevolucao();
                             break;
-
                         case "3":
                             telaEmprestimo.VisualizarEmprestimos(true);
                             break;
-
                         case "4":
-                            
-                            break;
-                        case "5":
                             telaEmprestimo.VisualizarMultas(true);
                             break;
-                        case "6":
+                        case "5":
                             telaEmprestimo.RegistrarPagamento();
                             break;
-                        case "7":
+                        case "6":
                             break;
                         default:
                             Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
                             break;
                     }
-                } else if (opcaoPrincipal == "5")
+                }
+                else if (opcaoPrincipal == "5")
                 {
-                    break;
-                } else
+                    string opcaoCaixa = telaReserva.MenuReservas();
+                    switch (opcaoCaixa)
+                    {
+                        case "1":
+                            telaReserva.RegistrarReserva();
+                            break;
+
+                        case "2":
+                            telaReserva.VisualizarReservas(true);
+                            break;
+
+                        case "3":
+                            telaReserva.CancelarReserva();
+                            break;
+
+                        case "4":
+                            telaReserva.RetirarReserva();
+                            break;
+
+                        case "5":
+                            break;
+                        default:
+                            Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
+                            break;
+                    }
+                }
+                else if (opcaoPrincipal == "6") break;
+                else
                 {
                     Notificador.ExibirMensagem("Opção Inválida, tente novamente", ConsoleColor.Red);
                 }
