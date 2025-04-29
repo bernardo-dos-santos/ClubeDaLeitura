@@ -1,4 +1,5 @@
-﻿using ClubeDaLeituraConsoleApp.ModuloAmigo;
+﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloCaixa;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
@@ -9,36 +10,42 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 {
-    public class Emprestimo
+    public class Emprestimo : EntidadeBase<Emprestimo>
     {
-        public int Id;
-        public Amigo Amigo;
-        public Revista Revista;
-        public DateTime DataEmprestimo;
-        public DateTime DataDevolucao;
-        public string Situacao;
-        public string[] situacoes = new string[] {"Aberto", "Concluído", "Atrasado"};
-        public decimal ValorMulta;
-        public bool TemMulta;
+        RepositorioCaixa repositorioCaixa;
+        public Amigo Amigo { get; set; }
+        public Revista Revista { get; set; }
+        public DateTime DataEmprestimo { get; set; }
+        public DateTime DataDevolucao 
+        { 
+            get 
+            {
+                int IdCaixa = Revista.IdCaixa;
+                int dias = repositorioCaixa.SelecionarRegistroPorId(IdCaixa).DiasDeEmprestimo;
+                return DataEmprestimo.AddDays(dias);
+            } 
+        }
+        public string Situacao { get; set; }
+        public string[] situacoes { get; set; } = new string[] {"Aberto", "Concluído", "Atrasado"};
+        public decimal ValorMulta { get; set; }
+        public bool TemMulta { get; set; }
 
-        public Emprestimo(Amigo amigo, Revista revista, DateTime dataEmprestimo)
+        public Emprestimo(Amigo amigo, Revista revista, DateTime dataEmprestimo, RepositorioCaixa repositorioCaixa)
         {
             Amigo = amigo;
             Revista = revista;
             DataEmprestimo = dataEmprestimo;
+            this.repositorioCaixa = repositorioCaixa;
         }
 
-        public void RegistrarDevolução( Revista r)
+        public override void AtualizarRegistro(Emprestimo registroEditado)
         {
-            r.Devolver();
-
+            throw new NotImplementedException();
         }
 
-        public DateTime ObterDataDevolucao(int idCaixa, RepositorioCaixa c)
+        public override string Validar()
         {
-            int dias = c.caixas[idCaixa - 1].DiasDeEmprestimo;
-            DataDevolucao = DataEmprestimo.AddDays(dias);
-            return DataDevolucao;
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,17 +13,11 @@ namespace ClubeDaLeituraConsoleApp.Compartilhado
             string? Id = Console.ReadLine();
                 
             int IdEditar;
-            if (!int.TryParse(Id, out IdEditar))
+            if (!int.TryParse(Id, out IdEditar) || IdEditar < 1)
             {
                 
                 Notificador.ExibirMensagem("O número mencionado não existe, retornando", ConsoleColor.Red);
                 return 0;
-            } else
-            {
-                if (IdEditar == 0)
-                {
-                    Notificador.ExibirMensagem("O número 0 não é correto nesse escopo", ConsoleColor.Red);
-                }
             }
                 return IdEditar;
         }

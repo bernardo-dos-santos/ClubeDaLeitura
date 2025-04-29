@@ -8,55 +8,28 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 {
-    public class RepositorioEmprestimo
+    public class RepositorioEmprestimo : RepositorioBase<Emprestimo>
     {
-        public Emprestimo[] emprestimos = new Emprestimo[100];
-        public int contadorEmprestimo = 0;
 
         public void Cadastrar(Emprestimo e)
         {
-            e.Id = GeradorId.GerarIdEmprestimo();
             e.Situacao = e.situacoes[0];
             e.Amigo.emprestimo = true;
             e.Revista.Emprestar();
-            emprestimos[contadorEmprestimo] = e;
-            contadorEmprestimo++;
+            CadastrarRegistro(e);
         }
-
-        public Emprestimo SelecionarPorId(int id)
-        {
-            for (int i = 0; i < emprestimos.Length; i++)
-            {
-                Emprestimo e = emprestimos[i];
-                if (e == null) continue;
-
-                if (e.Id == id)
-                {
-                    return e;
-                }
-            }
-            return null;
-        }
-
-        public Emprestimo[] SelecionarTodos()
-        {
-            return emprestimos;
-        }
-
         public void RegistrarMultas()
         {
             string situacao = "Atrasado";
-            for (int i = 0; i < emprestimos.Length; i++)
+            foreach (var e in SelecionarRegistros())
             {
-                Emprestimo e = emprestimos[i];
-                if (e == null) continue;
-                if(e.Situacao == situacao)
+                if (e.Situacao == situacao)
                 {
                     e.TemMulta = true;
                     int multa = (e.DataDevolucao - DateTime.Now).Days;
                     e.ValorMulta = multa * 2;
                 }
-            }
+            }    
         }
         public void RegistrarPagamento(Emprestimo e)
         {

@@ -1,4 +1,5 @@
-﻿using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
+﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,13 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloAmigo
 {
-    public class Amigo
+    public class Amigo : EntidadeBase<Amigo>
     {
-        public int Id;
-        public string Nome;
-        public string NomeResponsavel;
-        public string Telefone;
-        public bool emprestimo = false;
-        public string ListaNegra = "Não";
+        public string Nome { get; set; }
+        public string NomeResponsavel { get; set; }
+        public string Telefone { get; set; }
+        public bool emprestimo { get; set; }
+        public string ListaNegra { get; set; } = "Não";
 
         public Amigo(string nome, string nomeResponsavel, string telefone)
         {
@@ -25,7 +25,14 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
             Telefone = telefone;
         }
 
-        public string Validar()
+        public override void AtualizarRegistro(Amigo registroEditado)
+        {
+            Nome = registroEditado.Nome;
+            NomeResponsavel = registroEditado.NomeResponsavel;
+            Telefone = registroEditado.Telefone;
+        }
+
+        public override string Validar()
         {
             string erros = "";
 
@@ -49,16 +56,13 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
 
             return erros;
         }
-        public string ValidarListaNegra(Emprestimo e, Amigo m)
+        public void ValidarListaNegra(Emprestimo e)
         {
             bool listaNegra = false;
-            if (e.Amigo == m)
-            {
-                if (e.Situacao == "Atrasado") listaNegra = true;
-            }
+            
+            if (e.Situacao == "Atrasado") listaNegra = true;
             if (listaNegra == true) ListaNegra = "Sim";
             else ListaNegra = "Não";
-                return ListaNegra;
         }
 
 

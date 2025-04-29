@@ -1,4 +1,5 @@
-﻿using ClubeDaLeituraConsoleApp.ModuloAmigo;
+﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,13 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloReservas
 {
-    public class Reserva
+    public class Reserva : EntidadeBase<Reserva>
     {
-        public int Id;
-        public Amigo amigo;
-        public Revista revista;
-        public DateTime DataReserva;
-        public string[] Status = new string[] { "Reservado", "Concluído" };
-        public string StatusAtual;
+        public Amigo amigo { get; set; }
+        public Revista revista { get; set; }
+        public DateTime DataReserva { get; set; }
+        public string[] Status { get; set; } = new string[] { "Reservado", "Concluído" };
+        public string StatusAtual { get; set; }
 
         public Reserva(Amigo amigo, Revista revista)
         {
@@ -23,6 +23,16 @@ namespace ClubeDaLeituraConsoleApp.ModuloReservas
             this.revista = revista;
             DataReserva = DateTime.Now;
             StatusAtual = Status[0];
+        }
+
+        public override void AtualizarRegistro(Reserva registroEditado)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string Validar()
+        {
+            throw new NotImplementedException();
         }
     }
 }

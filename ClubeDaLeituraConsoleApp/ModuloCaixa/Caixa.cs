@@ -2,6 +2,7 @@
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -9,58 +10,48 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloCaixa
 {
-    public class Caixa
+    public class Caixa : EntidadeBase<Caixa>
     {
-        public int Id;
-        public string Etiqueta;
-        public string Cor;
-        public int DiasDeEmprestimo;
-        public Revista[] revistasNaCaixa = new Revista[40];
-        public int contadorRevistas = 0;
-        public Caixa(string etiqueta, string cor, int diasDeEmprestimo)
+        public string Etiqueta { get; set; }
+        public string Cor { get; set; }
+        public int DiasDeEmprestimo { get; set; }
+        public List<Revista> revistasNaCaixa { get; set; } = new List<Revista>();
+
+        public RepositorioCaixa repositorioCaixa;
+
+        public Caixa(string etiqueta, string cor, int diasDeEmprestimo, RepositorioCaixa repositorioCaixa)
         {
             Etiqueta = etiqueta;
             Cor = cor;
             DiasDeEmprestimo = diasDeEmprestimo;
+            this.repositorioCaixa = repositorioCaixa;
         }
 
         public void AdicionarRevista(Revista r)
         {
-            revistasNaCaixa[contadorRevistas] = r;
-            contadorRevistas++;
+            revistasNaCaixa.Add(r);
         }
         public void RemoverRevista(Revista r)
-        {
-            for (int i = 0; i < revistasNaCaixa.Length; i++)
-            {
-                if (revistasNaCaixa[i] == null) continue;
-                if (revistasNaCaixa[i].Id == r.Id)
-                {
-                    revistasNaCaixa[i] = null;
-                    return;
-                }
-            
-            };
+        {           
+            revistasNaCaixa.Remove(r);      
         }
 
-        public string Validar(RepositorioCaixa repositorioCaixa)
+        public override string Validar()
         {
-            Caixa[] caixas = repositorioCaixa.caixas;
+            List<Caixa> caixas = repositorioCaixa.SelecionarRegistros();
             string erros = "";
             if (string.IsNullOrWhiteSpace(Etiqueta))
                 erros += "O campo 'Etiqueta' é obrigatório.\n";
             else if(Etiqueta.Length > 50)
                 erros += "O campo 'Etiqueta' pode ter até 50 caracteres.\n";
-                for (int i = 0; i < caixas.Length; i++)
+            foreach (var item in caixas)
+            {
+                foreach (var item2 in caixas)
                 {
-                if (caixas[i] == null) continue;
-                    for (int j = 0; j < caixas.Length; j++)
-                    {
-                        if (caixas[j] == null) continue;
-                    if (caixas[i].Etiqueta == caixas[j].Etiqueta)
-                            erros += "O campo 'Etiqueta' precisa ser único.\n";
-                    }
+                    if (item != item2 && item.Etiqueta == item2.Etiqueta)
+                        erros += "O campo 'Etiqueta' precisa ser único.\n";
                 }
+            }
 
             if (string.IsNullOrWhiteSpace(Cor))
                 erros += "O campo 'Cor' é obrigatório.\n";
@@ -81,5 +72,14 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
                 return true;
             }
         }
+
+        public override void AtualizarRegistro(Caixa registroEditado)
+        {
+            Etiqueta = registroEditado.Etiqueta;
+            Cor = registroEditado.Cor;
+            DiasDeEmprestimo = registroEditado.DiasDeEmprestimo;
+        }
+
+        
     }
 }

@@ -10,11 +10,9 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloReservas
 {
-    public class RepositorioReserva
+    public class RepositorioReserva : RepositorioBase<Reserva>
     {
         public RepositorioEmprestimo repositorioEmprestimo;
-        public Reserva[] reservas = new Reserva[100];
-        public int contadorReservas = 0;
         public RepositorioReserva(RepositorioEmprestimo repositorioEmprestimo)
         {
             this.repositorioEmprestimo = repositorioEmprestimo;
@@ -22,51 +20,26 @@ namespace ClubeDaLeituraConsoleApp.ModuloReservas
 
         public void Registrar(Reserva r)
         {
-            r.Id = GeradorId.GerarIdReserva();
             r.revista.Reservar();
             r.amigo.emprestimo = true;
-            reservas[contadorReservas] = r;
-            contadorReservas++;
+            CadastrarRegistro(r);
         }
 
         public void Excluir(int Id)
         {
-            for (int i = 0; i < reservas.Length; i++)
+            List<Reserva> reservas = SelecionarRegistros();
+            foreach (var r in reservas)
             {
-                if (reservas[i] == null) continue;
-
-                if (reservas[i].Id == Id)
+                if (r.Id == Id)
                 {
-                    if (reservas[i].revista.StatusAtual == "Reservada")
+                    if (r.revista.StatusAtual == "Reservada")
                     {
-                        reservas[i].revista.Devolver();
-                        reservas[i].amigo.emprestimo = false;
+                        r.revista.Devolver();
+                        r.amigo.emprestimo = false;
                     }
-                    
-                    reservas[i] = null;
                 }
             }
-
-        }
-
-        public Reserva SelecionarPorId(int Id)
-        {
-            Reserva r;
-            for (int i = 0; i < reservas.Length; i++)
-            {
-                r = reservas[i];
-                if (r == null) continue;
-                if(r.Id == Id)
-                {
-                    return r;
-                }
-            }
-            return null;
-        } 
-        
-        public Reserva[] SelecionarTodos()
-        {
-            return reservas;
+            reservas.Remove(SelecionarRegistroPorId(Id));
         }
     }
 }

@@ -21,8 +21,8 @@ namespace ClubeDaLeituraConsoleApp
             TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
             TelaAmigo telaAmigo = new TelaAmigo(repositorioAmigo, repositorioEmprestimo);
             TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa);
-            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioAmigo, repositorioRevista);
-            TelaReserva telaReserva = new TelaReserva(repositorioReserva, repositorioAmigo, repositorioRevista, repositorioEmprestimo);
+            TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioAmigo, repositorioRevista, repositorioCaixa);
+            TelaReserva telaReserva = new TelaReserva(repositorioReserva, repositorioAmigo, repositorioRevista, repositorioEmprestimo, repositorioCaixa);
 
             while(true)
             {
@@ -30,23 +30,23 @@ namespace ClubeDaLeituraConsoleApp
 
                 if (opcaoPrincipal == "1")
                 {
-                    string opcaoAmigo = telaAmigo.MenuAmigo();
+                    string opcaoAmigo = telaAmigo.ApresentarMenu();
                     switch (opcaoAmigo)
                     {
                         case "1":
-                            telaAmigo.CadastrarAmigo();
+                            telaAmigo.CadastrarRegistro();
                             break;
 
                         case "2":
-                            telaAmigo.EditarAmigo();
+                            telaAmigo.EditarRegistro();
                             break;
 
                         case "3":
-                            telaAmigo.VisualizarAmigos(true);
+                            telaAmigo.VisualizarRegistros(true);
                             break;
 
                         case "4":
-                            telaAmigo.ExcluirAmigo();
+                            telaAmigo.ExcluirRegistro();
                             break;
 
                         case "5":
@@ -58,23 +58,23 @@ namespace ClubeDaLeituraConsoleApp
                 }
                 else if (opcaoPrincipal == "2")
                 {
-                    string opcaoRevista = telaRevista.MenuRevistas();
+                    string opcaoRevista = telaRevista.ApresentarMenu();
                     switch (opcaoRevista)
                     {
                         case "1":
-                            telaRevista.CadastrarRevista();
+                            telaRevista.CadastrarRegistro();
                             break;
 
                         case "2":
-                            telaRevista.EditarRevista();
+                            telaRevista.EditarRegistro();
                             break;
 
                         case "3":
-                            telaRevista.VisualizarRevistas(true);
+                            telaRevista.VisualizarRegistros(true);
                             break;
 
                         case "4":
-                            telaRevista.ExcluirRevista();
+                            telaRevista.ExcluirRegistro();
                             break;
 
                         case "5":
@@ -86,19 +86,19 @@ namespace ClubeDaLeituraConsoleApp
                 }
                 else if (opcaoPrincipal == "3")
                 {
-                    string opcaoCaixa = telaCaixa.MenuCaixas();
+                    string opcaoCaixa = telaCaixa.ApresentarMenu();
                     switch (opcaoCaixa)
                     {
                         case "1":
-                            telaCaixa.CadastrarCaixa();
+                            telaCaixa.CadastrarRegistro();
                             break;
 
                         case "2":
-                            telaCaixa.EditarCaixa();
+                            telaCaixa.EditarRegistro();
                             break;
 
                         case "3":
-                            telaCaixa.VisualizarCaixas(true);
+                            telaCaixa.VisualizarRegistros(true);
                             break;
 
                         case "4":
@@ -114,17 +114,17 @@ namespace ClubeDaLeituraConsoleApp
                 }
                 else if (opcaoPrincipal == "4")
                 {
-                    string opcaoEmprestimo = telaEmprestimo.MenuEmprestimos();
+                    string opcaoEmprestimo = telaEmprestimo.ApresentarMenu();
                     switch (opcaoEmprestimo)
                     {
                         case "1":
-                            telaEmprestimo.RegistrarEmprestimo();
+                            telaEmprestimo.CadastrarRegistro();
                             break;
                         case "2":
                             telaEmprestimo.RegistrarDevolucao();
                             break;
                         case "3":
-                            telaEmprestimo.VisualizarEmprestimos(true);
+                            telaEmprestimo.VisualizarRegistros(true);
                             break;
                         case "4":
                             telaEmprestimo.VisualizarMultas(true);
@@ -141,7 +141,7 @@ namespace ClubeDaLeituraConsoleApp
                 }
                 else if (opcaoPrincipal == "5")
                 {
-                    string opcaoCaixa = telaReserva.MenuReservas();
+                    string opcaoCaixa = telaReserva.ApresentarMenu();
                     switch (opcaoCaixa)
                     {
                         case "1":
@@ -149,7 +149,7 @@ namespace ClubeDaLeituraConsoleApp
                             break;
 
                         case "2":
-                            telaReserva.VisualizarReservas(true);
+                            telaReserva.VisualizarRegistros(true);
                             break;
 
                         case "3":

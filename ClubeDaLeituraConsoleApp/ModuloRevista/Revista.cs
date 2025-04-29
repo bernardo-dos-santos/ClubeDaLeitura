@@ -9,23 +9,26 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloRevista
 {
-    public class Revista
+    public class Revista : EntidadeBase<Revista>
     {
-        public int Id;
-        public string Titulo;
-        public int NumeroEdicao;
-        public DateTime AnoPublicado;
-        public string[] StatusEmprestimo = new string[] { "Emprestada", "Disponível", "Reservada" };
-        public string StatusAtual;
-        public int IdCaixa;
-        public string caixa;
 
-        public Revista(string titulo, int numeroEdicao, DateTime anoPublicado, int idcaixa)
+        public string Titulo { get; set; }
+        public int NumeroEdicao { get; set; }
+        public DateTime AnoPublicado { get; set; }
+        public string[] StatusEmprestimo { get; set; } = new string[] { "Emprestada", "Disponível", "Reservada" };
+        public string StatusAtual { get; set; }
+        public int IdCaixa { get; set; }
+        public string caixa { get; set; }
+
+        RepositorioRevista repositorioRevista;
+
+        public Revista(string titulo, int numeroEdicao, DateTime anoPublicado, int idcaixa, RepositorioRevista repositorioRevista)
         {
             Titulo = titulo;
             NumeroEdicao = numeroEdicao;
             AnoPublicado = anoPublicado;
             IdCaixa = idcaixa;
+            this.repositorioRevista = repositorioRevista;
         }
 
         public void Emprestar()
@@ -40,9 +43,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
         {
             StatusAtual = StatusEmprestimo[2];
         }
-        public string Validar(RepositorioRevista repositorioRevista)
+        public override string Validar()
         {
-            Revista[] revistas = repositorioRevista.revistas;
+            List<Revista> revistas = repositorioRevista.SelecionarRegistros();
             string erros = "";
             if (string.IsNullOrWhiteSpace(Titulo))
                 erros += "O campo 'Titulo' é obrigatório.\n";
@@ -51,17 +54,23 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
 
             if (NumeroEdicao < 0 || NumeroEdicao == null)
                 erros += "O campo 'Numero da edição' é obrigatório e não pode ser negativo.\n";
-            for (int i = 0; i < revistas.Length; i++)
+            foreach (var revista1 in revistas)
             {
-                if (revistas[i] == null) continue;
-                for (int j = 1; j < revistas.Length - 1; j++)
+                foreach (var revista2 in revistas)
                 {
-                    if (revistas[j] == null) continue;
-                    if (revistas[i].Titulo == revistas[j].Titulo && revistas[i].NumeroEdicao == revistas[j].NumeroEdicao)
+                    if (revista1.Titulo == revista2.Titulo && revista1.NumeroEdicao == revista2.NumeroEdicao && revista1 != revista2)
                         erros += "Os Campos 'Título' e 'Número de Edição não podem repetir juntos'.\n";
                 }
-            }
+            }    
             return erros;
+        }
+
+        public override void AtualizarRegistro(Revista registroEditado)
+        {
+            Titulo = registroEditado.Titulo;
+            NumeroEdicao = registroEditado.NumeroEdicao;
+            AnoPublicado = registroEditado.AnoPublicado;
+            IdCaixa = registroEditado.IdCaixa;
         }
     }
 }
