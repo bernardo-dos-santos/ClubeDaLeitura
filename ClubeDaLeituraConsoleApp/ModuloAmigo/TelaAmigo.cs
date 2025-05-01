@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.Interfaces;
 using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloAmigo
 {
-    public class TelaAmigo : TelaBase<Amigo>
+    public class TelaAmigo : TelaBase<Amigo>, IApresentarOpcoes, ITelaCrud
     {
         public RepositorioAmigo repositorioAmigo;
         public RepositorioEmprestimo repositorioEmprestimo;
@@ -20,6 +21,20 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
         {
             this.repositorioAmigo = repositorioAmigo;
             this.repositorioEmprestimo = repositorioEmprestimo;
+        }
+
+        public void ApresentarOpcoes(string opcao)
+        {
+            switch (opcao)
+            {
+                case "1": CadastrarRegistro(); break;
+                case "2": EditarRegistro(); break;
+                case "3": VisualizarRegistros(true); break;
+                case "4": ExcluirRegistro(); break;
+                case "5": break;
+
+                default: break;
+            }
         }
         public override void VisualizarRegistros(bool exibirTitulo)
         {
@@ -113,5 +128,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloAmigo
 
             return true;
         }
+
+        
     }
 }

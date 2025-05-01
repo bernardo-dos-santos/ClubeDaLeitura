@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.Interfaces;
 using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloCaixa;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 {
-    public class TelaEmprestimo : TelaBase<Emprestimo>
+    public class TelaEmprestimo : TelaBase<Emprestimo>, IApresentarOpcoes, ITelaCrud
     {
         public RepositorioEmprestimo repositorioEmprestimo;
         public RepositorioAmigo repositorioAmigo;
@@ -38,6 +39,20 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
             string? opcao = Console.ReadLine();
 
             return opcao;
+        }
+        public void ApresentarOpcoes(string opcao)
+        {
+            switch (opcao)
+            {
+                case "1": CadastrarRegistro(); break;
+                case "2": RegistrarDevolucao(); break;
+                case "3": VisualizarRegistros(true); break;
+                case "4": VisualizarMultas(true); break;
+                case "5": RegistrarPagamento(); break;
+                case "6": break;
+
+                default: break;
+            }
         }
         public override void CadastrarRegistro()
         {
@@ -276,6 +291,7 @@ namespace ClubeDaLeituraConsoleApp.ModuloEmprestimo
 
             return true;
         }
+
         
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.Interfaces;
 using ClubeDaLeituraConsoleApp.ModuloRevista;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloCaixa
 {
-    public class TelaCaixa : TelaBase<Caixa>
+    public class TelaCaixa : TelaBase<Caixa>, IApresentarOpcoes, ITelaCrud
     {
 
         public RepositorioCaixa repositorioCaixa;
@@ -44,6 +45,19 @@ namespace ClubeDaLeituraConsoleApp.ModuloCaixa
             Console.WriteLine();
 
             Notificador.ExibirMensagem("Pressione ENTER para continuar...", ConsoleColor.DarkYellow);
+        }
+        public void ApresentarOpcoes(string opcao)
+        {
+            switch (opcao)
+            {
+                case "1": CadastrarRegistro(); break;
+                case "2": EditarRegistro(); break;
+                case "3": VisualizarRegistros(true); break;
+                case "4": ExcluirCaixa(); break;
+                case "5": break;
+
+                default: break;
+            }
         }
         public void ExcluirCaixa()
         {

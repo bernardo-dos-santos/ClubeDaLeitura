@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.Interfaces;
 using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloCaixa;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloRevista
 {
-    public class TelaRevista : TelaBase<Revista>
+    public class TelaRevista : TelaBase<Revista>, IApresentarOpcoes, ITelaCrud
     {
         public RepositorioRevista repositorioRevista;
         public RepositorioCaixa repositorioCaixa;
@@ -19,6 +20,20 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
         {
             this.repositorioRevista = repositorioRevista;
             this.repositorioCaixa = repositorioCaixa;
+        }
+
+        public void ApresentarOpcoes(string opcao)
+        {
+            switch (opcao)
+            {
+                case "1": CadastrarRegistro(); break;
+                case "2": EditarRegistro(); break;
+                case "3": VisualizarRegistros(true); break;
+                case "4": ExcluirRegistro(); break;
+                case "5": break;
+
+                default: break;
+            }
         }
         public override void CadastrarRegistro()
         {
@@ -195,6 +210,6 @@ namespace ClubeDaLeituraConsoleApp.ModuloRevista
             if (idCaixa == 0) return null;
             Revista novaRevista = new Revista(titulo, numeroEdicao, anoPublicado, idCaixa, repositorioRevista);
             return novaRevista;
-        }       
+        }
     }
 }

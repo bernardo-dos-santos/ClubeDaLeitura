@@ -1,4 +1,5 @@
 ﻿using ClubeDaLeituraConsoleApp.Compartilhado;
+using ClubeDaLeituraConsoleApp.Interfaces;
 using ClubeDaLeituraConsoleApp.ModuloAmigo;
 using ClubeDaLeituraConsoleApp.ModuloCaixa;
 using ClubeDaLeituraConsoleApp.ModuloEmprestimo;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ClubeDaLeituraConsoleApp.ModuloReservas
 {
-    public class TelaReserva : TelaBase<Reserva>
+    public class TelaReserva : TelaBase<Reserva>, IApresentarOpcoes, ITelaCrud
     {
         public RepositorioReserva repositorioReserva;
         public RepositorioAmigo repositorioAmigo;
@@ -40,6 +41,19 @@ namespace ClubeDaLeituraConsoleApp.ModuloReservas
             string? opcao = Console.ReadLine();
 
             return opcao;
+        }
+        public void ApresentarOpcoes(string opcao)
+        {
+            switch (opcao)
+            {
+                case "1": RegistrarReserva(); break;
+                case "2": VisualizarRegistros(true); break;
+                case "3": CancelarReserva(); break;
+                case "4": RetirarReserva(); break;
+                case "5": break;
+
+                default: break;
+            }
         }
         public void RegistrarReserva()
         {
@@ -204,10 +218,9 @@ namespace ClubeDaLeituraConsoleApp.ModuloReservas
 
             Amigo amigo = repositorioAmigo.SelecionarRegistroPorId(IdAmigo);
             Revista revista = repositorioRevista.SelecionarRegistroPorId(idRevista);
-            
+
             Reserva novaReserva = new Reserva(amigo, revista);
             return novaReserva;
         }
-
     }
 }
